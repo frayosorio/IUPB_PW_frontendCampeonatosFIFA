@@ -1,0 +1,26 @@
+<mat-toolbar>
+  <img src="iconos/Ciudad.png">
+  <div class="barraTituloCRUD">
+    Ciudades
+  </div>
+</mat-toolbar>
+
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Buscar</mat-label>
+    <input matInput [(ngModel)]="textoBusqueda">
+  </mat-form-field>
+  <button matButton="filled" color="primary" (click)="buscar()">Buscar</button>
+</div>
+
+<div>
+  <button matButton="filled" (click)="agregar()">Agregar</button>
+  <button matButton="tonal" (click)="modificar()">Modificar</button>
+  <button matButton="outlined" (click)="verificarEliminar()">Eliminar</button>
+  <ngx-datatable [headerHeight]="50" [footerHeight]="50"
+                 [rows]="ciudades" [columns]="columnas" class="dark" [limit]="10"
+                 [columnMode]="modoColumna.force" (activate)="escoger($event)"
+                 [selectionType]="'single'">
+  </ngx-datatable>
+</div>
+
