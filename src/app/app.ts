@@ -1,16 +1,61 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, signal} from '@angular/core';
+import {Router, RouterOutlet} from '@angular/router';
 import {ReferenciasMaterialModule} from '../shared/modulos/referencias-material.module';
+import {Usuario} from '../shared/entidades/Usuario';
+import {MatDialog} from '@angular/material/dialog';
+import {UsuarioServicio} from '../core/servicios/usuario-servicio';
+import {LoginComponente} from '../features/componentes/login-componente/login-componente';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    ReferenciasMaterialModule
+    ReferenciasMaterialModule,
+    NgIf
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('CampeonatosFIFA');
+
+  public usuarioActual: Usuario | null = null;
+
+  constructor(private dialogServicio: MatDialog,
+              private usuarioServicio: UsuarioServicio,
+              private router: Router
+  ) {
+  }
+
+
+  abrirLogin(): void {
+    const dialogRef = this.dialogServicio.open(LoginComponente, {
+      width: '400px',
+      height: '300px',
+      data: {usuario: "", clave: ""}
+    });
+    dialogRef.afterClosed().subscribe(datos => {
+        if (datos) {
+          this.usuarioServicio.iniciarSesion(datos.usuario, datos.clave).subscribe(
+            {
+              next: response => {
+                this.usuarioActual = response.usuario;
+                localStorage.setItem('usuarioActual', JSON.stringify(this.usuarioActual));
+                //this.autorizacionServicio.guardarToken(response.token);
+              },
+              error: error => {
+                window.alert(error.message);
+              }
+            }
+          );
+        }
+      }
+    );
+  }
+
+  cerrarSesion() {
+    this.usuarioActual = null;
+    this.router.navigate(["/inicio"]);
+  }
 }

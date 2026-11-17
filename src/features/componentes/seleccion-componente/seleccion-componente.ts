@@ -116,7 +116,7 @@ export class SeleccionComponente implements OnInit {
         height: '300px',
         data: {
           encabezado: `Editando la selección [${this.seleccionEscogida.nombre}]`,
-          seleccion: this.seleccionEscogida
+          seleccion: {...this.seleccionEscogida}
         },
         disableClose: true
       });

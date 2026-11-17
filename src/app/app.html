@@ -6,6 +6,19 @@
     <mat-toolbar>
       <img src="imagenes/Logo FIFA.jpg" height="80px">
       Campeonatos FIFA
+      <span class="spacer"></span>
+      <div *ngIf="usuarioActual==null">
+        <button mat-raised-button (click)="abrirLogin()">
+          <mat-icon>person</mat-icon>
+          Login
+        </button>
+      </div>
+      <div *ngIf="usuarioActual!=null">
+        <button mat-raised-button (click)="cerrarSesion()">
+          <mat-icon>exit_to_app</mat-icon>
+          Salir
+        </button>
+      </div>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
