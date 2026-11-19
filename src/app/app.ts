@@ -1,18 +1,20 @@
 import {Component, signal} from '@angular/core';
-import {Router, RouterOutlet} from '@angular/router';
+import {Router, RouterModule, RouterOutlet} from '@angular/router';
 import {ReferenciasMaterialModule} from '../shared/modulos/referencias-material.module';
 import {Usuario} from '../shared/entidades/Usuario';
 import {MatDialog} from '@angular/material/dialog';
 import {UsuarioServicio} from '../core/servicios/usuario-servicio';
 import {LoginComponente} from '../features/componentes/login-componente/login-componente';
-import {NgIf} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
+import {AutorizacionServicio} from '../core/servicios/autorizacion-servicio';
 
 @Component({
   selector: 'app-root',
   imports: [
-    RouterOutlet,
+    RouterOutlet, RouterModule,
     ReferenciasMaterialModule,
-    NgIf
+    NgIf,
+    NgFor
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -22,8 +24,18 @@ export class App {
 
   public usuarioActual: Usuario | null = null;
 
+  public opciones = [
+    {titulo: 'Selecciones', url: 'selecciones', icono: 'iconos/Seleccion.png'},
+    {titulo: 'Campeonatos', url: 'campeonatos', icono: 'iconos/Campeonato.png'},
+    {titulo: 'Grupos', url: 'grupos', icono: 'iconos/Grupo.png'},
+    {titulo: 'Encuentros', url: 'encuentros', icono: 'iconos/Encuentro.png'},
+    {titulo: 'Ciudades', url: 'ciudades', icono: 'iconos/Ciudad.png'},
+    {titulo: 'Estadios', url: 'estadios', icono: 'iconos/Estadio.png'},
+  ];
+
   constructor(private dialogServicio: MatDialog,
               private usuarioServicio: UsuarioServicio,
+              private autorizacionServicio: AutorizacionServicio,
               private router: Router
   ) {
   }
@@ -42,7 +54,7 @@ export class App {
               next: response => {
                 this.usuarioActual = response.usuario;
                 localStorage.setItem('usuarioActual', JSON.stringify(this.usuarioActual));
-                //this.autorizacionServicio.guardarToken(response.token);
+                this.autorizacionServicio.guardarToken(response.token);
               },
               error: error => {
                 window.alert(error.message);

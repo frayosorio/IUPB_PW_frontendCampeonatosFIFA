@@ -1,9 +1,22 @@
 <mat-sidenav-container>
-  <mat-sidenav>
-
+  <mat-sidenav #menuLateral>
+    <mat-nav-list>
+      <div *ngFor="let opcion of opciones">
+        <button mat-button [routerLink]="[opcion.url]" class="menu-button"
+                (click)="menuLateral.toggle()">
+          <img [src]="opcion.icono" [alt]="opcion.titulo">
+          {{ opcion.titulo }}
+        </button>
+      </div>
+    </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar>
+      <div *ngIf="usuarioActual!=null">
+        <button mat-icon-button class="menu-toggle" (click)="menuLateral.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
       <img src="imagenes/Logo FIFA.jpg" height="80px">
       Campeonatos FIFA
       <span class="spacer"></span>
@@ -20,6 +33,6 @@
         </button>
       </div>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <router-outlet class="contenido-principal"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
